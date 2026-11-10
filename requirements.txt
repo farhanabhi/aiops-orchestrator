@@ -1,0 +1,12 @@
+fastapi>=0.115.8
+uvicorn[standard]>=0.34.0
+pydantic>=2.11.0
+pydantic-settings>=2.8.0
+langgraph>=0.3.0
+langchain-core>=0.3.45
+langchain-groq>=0.2.5
+qdrant-client>=1.13.2
+fastembed>=0.6.0
+httpx>=0.28.1
+streamlit>=1.43.0
+python-dotenv>=1.0.1
