@@ -11,14 +11,21 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-FASTAPI_BASE_URL = os.getenv("FASTAPI_BASE_URL", "http://127.0.0.1:8000").rstrip("/")
-
 st.set_page_config(
     page_title="AIOps Orchestrator | Self-Reflective CRAG",
     page_icon="⚡",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
+
+# Resolve FastAPI URL: st.secrets -> .env -> Live Render Backend fallback
+try:
+    FASTAPI_BASE_URL = st.secrets["FASTAPI_BASE_URL"].rstrip("/")
+except Exception:
+    FASTAPI_BASE_URL = os.getenv(
+        "FASTAPI_BASE_URL",
+        "https://aiops-orchestrator-api.onrender.com",
+    ).rstrip("/")
 
 # High-contrast developer theme styling
 st.markdown(
@@ -140,7 +147,7 @@ if trigger_btn:
 
     try:
         with st.status("Running LangGraph CRAG State Machine...", expanded=True) as status_box:
-            with httpx.Client(timeout=60.0) as client:
+            with httpx.Client(timeout=120.0) as client:
                 with client.stream(
                     "POST",
                     f"{FASTAPI_BASE_URL}/api/v1/triage/stream",
@@ -230,5 +237,5 @@ if trigger_btn:
     except Exception as exc:
         st.error(
             f"Could not connect to FastAPI backend at `{FASTAPI_BASE_URL}`. "
-            f"Ensure `uvicorn main:app --reload` is running.\n\nDetails: `{exc}`"
+            f"Verify your Render service is live at `{FASTAPI_BASE_URL}/health`.\n\nDetails: `{exc}`"
         )

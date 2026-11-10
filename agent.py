@@ -228,7 +228,7 @@ def rewrite_query_node(state: AgentState) -> Dict[str, Any]:
 def executor_node(state: AgentState) -> Dict[str, Any]:
     t0 = time.perf_counter()
     sop = state["retrieved_sop"]
-    fastapi_base = os.getenv("FASTAPI_BASE_URL", "http://127.0.0.1:8000").rstrip("/")
+    fastapi_base = os.getenv("FASTAPI_BASE_URL", "https://aiops-orchestrator-api.onrender.com").rstrip("/")
 
     payload = {
         "incident_service": state["service"],
